@@ -1,21 +1,19 @@
-// index.js
+// api/index.js
 const express = require('express');
+const serverless = require('serverless-http');
+
 const app = express();
-const PORT = 3000;
 
-
-app.use(express.json())
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello Raju Express!');
 });
 
 app.get('/about', (req, res) => {
-    console.log("GET /about hit");
+  console.log("GET /about hit");
   res.send('About: I am flutter developer ad bdcalling in Softvence');
 });
-
-
 
 app.get('/contract', (req, res) => {
   console.log("GET /contract hit");
@@ -31,39 +29,22 @@ app.get('/contract', (req, res) => {
     platform: "CodeCanyon"
   });
 });
- app.get("/product",(req,res)=>{
 
-  res.status(200).json(
-    {
-      "data":[
-        {
-          "id":1,
-          "name":"A",
-          "price":100
-        },
-        {
-          "id":2,
-          "name":"B",
-          "price":200
-        },
-        {
-          "id":3,
-          "name":"C",
-          "price":40
-        }
-      ],
-      "message":"product fecth succesfully",
-      "code":200,
-      "statas":true
-    }
-  )
- })
-
+app.get("/product", (req, res) => {
+  res.status(200).json({
+    data: [
+      { id: 1, name: "A", price: 100 },
+      { id: 2, name: "B", price: 200 },
+      { id: 3, name: "C", price: 40 }
+    ],
+    message: "product fetch successfully",
+    code: 200,
+    statas: true
+  });
+});
 
 app.post("/register", (req, res) => {
   const { name, phone, email, age } = req.body;
-
-  // Create object for missing fields with message
   const missingFields = {};
 
   if (!name) missingFields.name = "name is required";
@@ -80,7 +61,6 @@ app.post("/register", (req, res) => {
     });
   }
 
-  // All fields present
   res.status(201).json({
     data: { name, phone, email, age },
     status: true,
@@ -89,6 +69,6 @@ app.post("/register", (req, res) => {
   });
 });
 
-app.listen(PORT,'0.0.0.0', () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+// export handler for vercel
+module.exports = app;
+module.exports.handler = serverless(app);
