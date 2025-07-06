@@ -28,7 +28,33 @@ app.get('/contract', (req, res) => {
     platform: "CodeCanyon"
   });
 });
+ app.get("/product",(req,res)=>{
 
+  res.status(200).json(
+    {
+      "data":[
+        {
+          "id":1,
+          "name":"A",
+          "price":100
+        },
+        {
+          "id":2,
+          "name":"B",
+          "price":200
+        },
+        {
+          "id":3,
+          "name":"C",
+          "price":40
+        }
+      ],
+      "message":"product fecth succesfully",
+      "code":200,
+      "statas":true
+    }
+  )
+ })
 
 
 app.listen(PORT,'0.0.0.0', () => {
