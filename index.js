@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
+
+app.use(express.json())
+
 app.get('/', (req, res) => {
   res.send('Hello Raju Express!');
 });
@@ -56,6 +59,35 @@ app.get('/contract', (req, res) => {
   )
  })
 
+
+app.post("/register", (req, res) => {
+  const { name, phone, email, age } = req.body;
+
+  // Create object for missing fields with message
+  const missingFields = {};
+
+  if (!name) missingFields.name = "name is required";
+  if (!phone) missingFields.phone = "phone is required";
+  if (!email) missingFields.email = "email is required";
+  if (!age) missingFields.age = "age is required";
+
+  if (Object.keys(missingFields).length > 0) {
+    return res.status(400).json({
+      status: false,
+      code: 400,
+      message: "Profile create failed",
+      data: missingFields
+    });
+  }
+
+  // All fields present
+  res.status(201).json({
+    data: { name, phone, email, age },
+    status: true,
+    code: 201,
+    message: "Profile created successfully"
+  });
+});
 
 app.listen(PORT,'0.0.0.0', () => {
   console.log(`Server running at http://localhost:${PORT}`);
